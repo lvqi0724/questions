@@ -10,22 +10,32 @@ class wait {
     constructor() {
         this.status = false;
     }
-    fnA() {
-        console.log('开始模拟请求 status : ',this.status)
+     fnA() {
+        console.log('开始模拟请求 status : ', this.status)
         setTimeout(() => {
             this.status = true;
-            console.log('模拟请求完成 返回 status :',this.status)
+            console.log('模拟请求完成 返回 status :', this.status)
         }, 3000)
     }
     async fnB() {
-        //TODO  
-      if(this.status==true){
-        console.log('fnA返回status == true,执行以下内容');
-      }
-       
+        if (this.status == true) {
+            console.log('fnA返回status == true,执行以下内容');
+        } else {
+          await this.fnC()
+            if(this._status){
+                console.log('fnA返回_status == true,执行以下内容');
+            }
+        }
     }
     async fnC() {
-       // TODO 
+        Object.defineProperty(this, 'status', {
+            set: function (v) {
+                if(v){
+                    this._status = v
+                    this.fnB()
+                }
+            }
+        })
     }
 
 }
